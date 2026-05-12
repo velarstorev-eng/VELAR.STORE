@@ -2672,7 +2672,8 @@
         diff_billing: "Different billing address", pay_now: "Pay Now",
         discount_code: "Discount code or gift card", apply: "Apply",
         subtotal: "Subtotal", shipping: "Shipping", co_sub: "Secure Checkout",
-        order_summary: "Order Summary", cancel: "Cancel", login_btn: "Sign in"
+        order_summary: "Order Summary", cancel: "Cancel", login_btn: "Sign in",
+        select_options: "Select Options",
       },
       ar: {
         logo: "فيلار", nav_new: "وصل حديثاً", nav_col: "التشكيلات", nav_about: "عن العلامة",
@@ -2700,7 +2701,8 @@
         diff_billing: "عنوان مختلف", pay_now: "ادفع الآن",
         discount_code: "كود الخصم", apply: "تطبيق",
         subtotal: "المجموع الفرعي", shipping: "مصاريف الشحن", co_sub: "دفع آمن",
-        order_summary: "ملخص الطلب", cancel: "إلغاء", login_btn: "تسجيل الدخول"
+        order_summary: "ملخص الطلب", cancel: "إلغاء", login_btn: "تسجيل الدخول",
+        select_options: "تحديد الخيارات",
       }
     };
 
@@ -2817,10 +2819,10 @@
                   <svg width="14" height="14" fill="${isWished ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                 </button>
               </div>
-<button class="card-add" onclick="event.stopPropagation();addToCart('${p.id}')">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                ${T[currentLang].add_to_cart}
-              </button>
+<button class="card-add" onclick="event.stopPropagation();openProduct('${p.id}')">
+  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+  ${T[currentLang].select_options}
+</button>
             </div>
             <div class="card-info">
               <div class="card-meta">${p.category || 'Streetwear'}</div>
@@ -2840,12 +2842,12 @@
 
     // ── GALLERY SLIDER FUNCTION ──
     function buildScrollGallery(imgs) {
-  const mainImg = document.getElementById('ppMainImg');
-  const thumbRow = document.getElementById('ppThumbs');
+      const mainImg = document.getElementById('ppMainImg');
+      const thumbRow = document.getElementById('ppThumbs');
 
-  // إزالة كل styles القديمة وتحديدها من الأساس
-  mainImg.removeAttribute('style');
-  mainImg.style.cssText = `
+      // إزالة كل styles القديمة وتحديدها من الأساس
+      mainImg.removeAttribute('style');
+      mainImg.style.cssText = `
     position: relative;
     width: 100%;
     aspect-ratio: 4/5;
@@ -2853,16 +2855,16 @@
     background: var(--surface2);
   `;
 
-  if (imgs.length === 0) {
-    mainImg.innerHTML = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:6rem;color:var(--surface3);">RVN</div>`;
-    thumbRow.innerHTML = '';
-    return;
-  }
+      if (imgs.length === 0) {
+        mainImg.innerHTML = `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:6rem;color:var(--surface3);">RVN</div>`;
+        thumbRow.innerHTML = '';
+        return;
+      }
 
-  // عرض الصورة الأولى
-  let currentIndex = 0;
+      // عرض الصورة الأولى
+      let currentIndex = 0;
 
-  mainImg.innerHTML = `
+      mainImg.innerHTML = `
     <img id="galleryImg" src="${imgs[0]}" 
       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity 0.4s ease;">
     ${imgs.length > 1 ? `
@@ -2871,53 +2873,53 @@
     ` : ''}
   `;
 
-  // Dots
-  if (imgs.length > 1) {
-    thumbRow.style.cssText = 'display:flex;gap:6px;align-items:center;justify-content:center;padding:12px 0;';
-    thumbRow.innerHTML = imgs.map((_, i) => `
+      // Dots
+      if (imgs.length > 1) {
+        thumbRow.style.cssText = 'display:flex;gap:6px;align-items:center;justify-content:center;padding:12px 0;';
+        thumbRow.innerHTML = imgs.map((_, i) => `
       <div onclick="galleryGoTo(${i})" id="dot-${i}"
-        style="width:${i===0?'20px':'6px'};height:6px;border-radius:3px;
-               background:${i===0?'var(--accent)':'var(--text-dimmer)'};
+        style="width:${i === 0 ? '20px' : '6px'};height:6px;border-radius:3px;
+               background:${i === 0 ? 'var(--accent)' : 'var(--text-dimmer)'};
                cursor:pointer;transition:all 0.3s;flex-shrink:0;">
       </div>`).join('');
-  } else {
-    thumbRow.innerHTML = '';
-  }
-
-  function updateDots(idx) {
-    imgs.forEach((_, i) => {
-      const dot = document.getElementById(`dot-${i}`);
-      if (dot) {
-        dot.style.width = i === idx ? '20px' : '6px';
-        dot.style.background = i === idx ? 'var(--accent)' : 'var(--text-dimmer)';
+      } else {
+        thumbRow.innerHTML = '';
       }
-    });
-  }
 
-  window.galleryGoTo = function(idx) {
-    currentIndex = (idx + imgs.length) % imgs.length;
-    const img = document.getElementById('galleryImg');
-    if (img) {
-      img.style.opacity = '0';
-      setTimeout(() => {
-        img.src = imgs[currentIndex];
-        img.style.opacity = '1';
-      }, 200);
+      function updateDots(idx) {
+        imgs.forEach((_, i) => {
+          const dot = document.getElementById(`dot-${i}`);
+          if (dot) {
+            dot.style.width = i === idx ? '20px' : '6px';
+            dot.style.background = i === idx ? 'var(--accent)' : 'var(--text-dimmer)';
+          }
+        });
+      }
+
+      window.galleryGoTo = function (idx) {
+        currentIndex = (idx + imgs.length) % imgs.length;
+        const img = document.getElementById('galleryImg');
+        if (img) {
+          img.style.opacity = '0';
+          setTimeout(() => {
+            img.src = imgs[currentIndex];
+            img.style.opacity = '1';
+          }, 200);
+        }
+        updateDots(currentIndex);
+      }
+
+      window.galleryPrev = function () { galleryGoTo(currentIndex - 1); }
+      window.galleryNext = function () { galleryGoTo(currentIndex + 1); }
+
+      // Swipe support
+      let touchStartX = 0;
+      mainImg.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+      mainImg.addEventListener('touchend', e => {
+        const diff = touchStartX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) diff > 0 ? galleryNext() : galleryPrev();
+      });
     }
-    updateDots(currentIndex);
-  }
-
-  window.galleryPrev = function() { galleryGoTo(currentIndex - 1); }
-  window.galleryNext = function() { galleryGoTo(currentIndex + 1); }
-
-  // Swipe support
-  let touchStartX = 0;
-  mainImg.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
-  mainImg.addEventListener('touchend', e => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) diff > 0 ? galleryNext() : galleryPrev();
-  });
-}
     // ── PRODUCT PAGE ──
     window.openProduct = function (id) {
       currentProduct = productsDB.find(p => p.id === id);
@@ -2934,8 +2936,12 @@
         : (currentProduct.nameAr || currentProduct.title || '');
       document.getElementById('ppPrice').textContent = `EGP ${currentProduct.price}`;
 
+      // 👇 ده السطر الجديد اللي هيشغل زرار الإضافة للسلة من جوه الصفحة
+      document.getElementById('ppAddToCart').onclick = () => addToCart(currentProduct.id);
+
       // جمع الصور من img و imgHover
       let imgs = [];
+
       if (currentProduct.img && currentProduct.img !== 'RVN') imgs.push(currentProduct.img);
       if (currentProduct.imgHover && currentProduct.imgHover !== 'RVN') imgs.push(currentProduct.imgHover);
       // لو في imgs array في الداتا، استخدمها بدل كده
