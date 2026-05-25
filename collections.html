@@ -2151,6 +2151,7 @@
         }
 
         @media (max-width: 768px) {
+
             nav {
                 padding: 0 1.5rem;
             }
@@ -2233,7 +2234,8 @@
                 left: 1rem;
             }
         }
-         /* ── CATEGORY FILTERS ── */
+
+        /* ── CATEGORY FILTERS ── */
         .filters-container {
             display: flex;
             gap: 1rem;
@@ -2242,8 +2244,13 @@
             padding-bottom: 0.5rem;
             justify-content: center;
         }
-        .filters-container::-webkit-scrollbar { display: none; } /* إخفاء سكرول البار */
-        
+
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* إخفاء سكرول البار */
+
         .cat-btn {
             background: transparent;
             border: 1px solid var(--border);
@@ -2256,11 +2263,122 @@
             transition: all 0.3s;
             white-space: nowrap;
         }
-        .cat-btn:hover, .cat-btn.active {
+
+        .cat-btn:hover,
+        .cat-btn.active {
             background: var(--accent);
             color: var(--bg);
             border-color: var(--accent);
             font-weight: 700;
+        }
+
+        .contact-links-wrapper {
+            display: flex;
+            justify-content: center;
+            max-width: 600px;
+            margin: 0 auto 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .contact-link {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.08em;
+            border-right: 1px solid var(--border);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        .contact-link:last-child {
+            border-right: none;
+        }
+
+        .contact-link:hover {
+            color: var(--accent);
+            background: var(--surface2);
+        }
+
+        @media (max-width: 768px) {
+
+            /* مساحة تحت عشان الشريط ميغطيش على المحتوى */
+            body {
+                padding-bottom: 70px;
+            }
+
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 65px;
+                background: rgba(8, 8, 8, 0.95);
+                backdrop-filter: blur(20px);
+                border-top: 1px solid var(--border);
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                z-index: 999;
+            }
+
+            [data-theme="light"] .bottom-nav {
+                background: rgba(245, 243, 238, 0.98);
+            }
+
+            .b-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                color: var(--text-dim);
+                text-decoration: none;
+                font-size: 0.55rem;
+                font-family: var(--font-mono);
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+            }
+
+            .b-nav-item.active,
+            .b-nav-item:hover {
+                color: var(--accent);
+            }
+
+            .b-nav-icon {
+                width: 20px;
+                height: 20px;
+            }
+
+            /* رفع زرار الواتساب لفوق شوية عشان ميغطيش على الشريط */
+            .whatsapp-float {
+                bottom: 85px;
+            }
+
+            .bottom-nav {
+                display: flex !important;
+            }
+
+            .contact-links-wrapper {
+                flex-direction: column;
+            }
+
+            .contact-link {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                width: 100%;
+                padding: 1.2rem;
+            }
+
+            .contact-link:last-child {
+                border-bottom: none;
+            }
         }
     </style>
 </head>
@@ -2277,10 +2395,10 @@
             <a href="index.html" class="nav-logo" data-i18n="logo">VELAR</a>
         </div>
         <ul class="nav-links">
-          <li><a href="index.html" data-i18n="nav_new">New Arrivals</a></li>
-<li><a onclick="filterProducts('all')" data-i18n="nav_col" style="cursor:pointer;">Collections</a></li>
-<li><a href="track.html" data-i18n="nav_track">Track Order</a></li>
-<li><a href="index.html#footer" data-i18n="nav_about">About</a></li>
+            <li><a href="index.html" data-i18n="nav_new">New Arrivals</a></li>
+            <li><a onclick="filterProducts('all')" data-i18n="nav_col" style="cursor:pointer;">Collections</a></li>
+            <li><a href="track.html" data-i18n="nav_track">Track Order</a></li>
+            <li><a href="index.html#footer" data-i18n="nav_about">About</a></li>
         </ul>
         <div class="nav-right">
             <button class="icon-btn" onclick="toggleLang()" title="Language">
@@ -2317,58 +2435,51 @@
             <div class="filters-container">
                 <button class="cat-btn active" onclick="filterCategory('all', this)">All</button>
                 <button class="cat-btn" onclick="filterCategory('T-shirt', this)">T-Shirts</button>
-                <button class="cat-btn" onclick="filterCategory('Hoodie', this)">Hoodies</button>
-                <button class="cat-btn" onclick="filterCategory('Pants', this)">Pants</button>
-                <button class="cat-btn" onclick="filterCategory('Accessories', this)">Accessories</button>
+                <button class="cat-btn" onclick="filterCategory('Bottom', this)">Bottoms</button>
             </div>
             <div id="mainProductsGrid"></div>
         </div>
 
-<footer id="footer" style="background: var(--surface); border-top: 1px solid var(--border); overflow: hidden; position: relative;">
-  
-  <!-- BIG BACKGROUND TEXT -->
-  <div style="font-family:'Bebas Neue',sans-serif; font-size: clamp(80px, 18vw, 220px); color: transparent; -webkit-text-stroke: 1px rgba(201,169,110,0.25); text-align: center; line-height: 0.85; padding-top: 3rem; user-select: none; pointer-events: none; letter-spacing: 0.05em;">
-    VELAR
-  </div>
+        <footer id="footer"
+            style="background: var(--surface); border-top: 1px solid var(--border); overflow: hidden; position: relative;">
 
-  <!-- CONTENT -->
-  <div style="padding: 0 3rem 3rem; text-align: center; margin-top: -1rem; position: relative; z-index: 2;">
-    
-    <div style="font-family:'Bebas Neue',sans-serif; font-size: 1.8rem; color: var(--accent); letter-spacing: 0.35em; margin-bottom: 0.5rem;">
-      VELAR
-    </div>
+            <!-- BIG BACKGROUND TEXT -->
+            <div
+                style="font-family:'Bebas Neue',sans-serif; font-size: clamp(80px, 18vw, 220px); color: transparent; -webkit-text-stroke: 1px rgba(201,169,110,0.25); text-align: center; line-height: 0.85; padding-top: 3rem; user-select: none; pointer-events: none; letter-spacing: 0.05em;">
+                VELAR
+            </div>
 
-    <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
-      <div style="height: 1px; width: 60px; background: var(--accent); opacity: 0.4;"></div>
-      <span style="font-family:'Space Mono',monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);">Streetwear & Casualwear</span>
-      <div style="height: 1px; width: 60px; background: var(--accent); opacity: 0.4;"></div>
-    </div>
+            <!-- CONTENT -->
+            <div style="padding: 0 3rem 3rem; text-align: center; margin-top: -1rem; position: relative; z-index: 2;">
 
-    <p style="font-family:'Bebas Neue',sans-serif; font-size: 1.4rem; letter-spacing: 0.2em; color: var(--text-dimmer); margin-bottom: 2.5rem;">
-      SPOTLIGHT ON YOURSELF
-    </p>
+                <div
+                    style="font-family:'Bebas Neue',sans-serif; font-size: 1.8rem; color: var(--accent); letter-spacing: 0.35em; margin-bottom: 0.5rem;">
+                    VELAR
+                </div>
 
-    <div style="display: flex; justify-content: center; gap: 0; margin-bottom: 2.5rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; max-width: 500px; margin-left: auto; margin-right: auto;">
-      <a href="mailto:velarstorev@gmail.com" style="flex:1; padding: 0.9rem 1rem; color: var(--text-dim); text-decoration: none; font-family:'Space Mono',monospace; font-size: 0.6rem; letter-spacing: 0.08em; border-right: 1px solid var(--border); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem;"
-        onmouseover="this.style.color='var(--accent)';this.style.background='var(--surface2)'"
-        onmouseout="this.style.color='var(--text-dim)';this.style.background='transparent'">
-        ✉ velarstorev@gmail.com
-      </a>
-      <a href="tel:+201095796144" style="flex:1; padding: 0.9rem 1rem; color: var(--text-dim); text-decoration: none; font-family:'Space Mono',monospace; font-size: 0.6rem; letter-spacing: 0.08em; border-right: 1px solid var(--border); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem;"
-        onmouseover="this.style.color='var(--accent)';this.style.background='var(--surface2)'"
-        onmouseout="this.style.color='var(--text-dim)';this.style.background='transparent'">
-        📞 +20 1095796144
-      </a>
-      <a href="https://www.instagram.com/velar.wear_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" style="flex:1; padding: 0.9rem 1rem; color: var(--text-dim); text-decoration: none; font-family:'Space Mono',monospace; font-size: 0.6rem; letter-spacing: 0.08em; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.4rem;"
-        onmouseover="this.style.color='var(--accent)';this.style.background='var(--surface2)'"
-        onmouseout="this.style.color='var(--text-dim)';this.style.background='transparent'">
-        ◎ Instagram
-      </a>
-    </div>
+                <div
+                    style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="height: 1px; width: 60px; background: var(--accent); opacity: 0.4;"></div>
+                    <span
+                        style="font-family:'Space Mono',monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim);">Streetwear
+                        & Casualwear</span>
+                    <div style="height: 1px; width: 60px; background: var(--accent); opacity: 0.4;"></div>
+                </div>
+
+                <p
+                    style="font-family:'Bebas Neue',sans-serif; font-size: 1.4rem; letter-spacing: 0.2em; color: var(--text-dimmer); margin-bottom: 2.5rem;">
+                    SPOTLIGHT ON YOURSELF
+                </p>
+
+                <div class="contact-links-wrapper">
+                    <a href="mailto:velarstorev@gmail.com" class="contact-link">✉ velarstorev@gmail.com</a>
+                    <a href="tel:+201095796144" class="contact-link">📞 +20 1095796144</a>
+                    <a href="https://www.instagram.com/velar.wear_" target="_blank" class="contact-link">◎ Instagram</a>
+                </div>
 
 
-  </div>
-</footer>
+            </div>
+        </footer>
 
     </div>
 
@@ -2390,6 +2501,9 @@
                 <h1 class="pp-title" id="ppTitle">Product</h1>
                 <div class="pp-price-row">
                     <div class="pp-price" id="ppPrice">EGP 0</div>
+                </div>
+                <!-- Related Products -->
+                <div id="ppRelated" style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border);">
                 </div>
                 <div id="ppColorsSection" style="margin-bottom:1.8rem;">
                     <div class="variant-label" data-i18n="label_color">Color <span id="ppColorSelected"></span></div>
@@ -2436,6 +2550,10 @@
                     </div>
                 </div>
                 <div class="pp-accordion" id="ppAccordion">
+
+                    <!-- Related Products -->
+                    <div id="ppRelated"
+                        style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--border);"></div>
                     <div class="pp-acc-item">
                         <button class="pp-acc-header" onclick="toggleAccordion(this)">
                             <span data-i18n="acc_desc">Description</span>
@@ -2679,6 +2797,33 @@
         </svg>
     </a>
 
+    <div class="bottom-nav" style="display: none;">
+        <a href="index.html" class="b-nav-item active">
+            <svg class="b-nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span data-i18n="nav_new">Home</span>
+        </a>
+        <a href="collections.html" class="b-nav-item">
+            <svg class="b-nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span data-i18n="nav_col">Shop</span>
+        </a>
+        <a href="track.html" class="b-nav-item">
+            <svg class="b-nav-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+            </svg>
+            <span data-i18n="nav_track">Track</span>
+        </a>
+    </div>
+
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
@@ -2845,7 +2990,7 @@
             if (!isOpen) item.classList.add('open');
         }
 
-// ── FILTER CATEGORIES ──
+        // ── FILTER CATEGORIES ──
         window.filterCategory = function (category, btnElement) {
             // تلوين الزرار اللي العميل داس عليه
             if (btnElement) {
@@ -2854,7 +2999,7 @@
             }
 
             closeProductPage();
-            
+
             // الفلترة
             if (category === 'all') {
                 productsDB = [...originalProducts];
@@ -3033,6 +3178,7 @@
                 buildScrollGallery(imgs);
                 renderProductVariations();
             });
+            renderRelatedProducts(currentProduct.relatedProducts || []);
         }
 
         window.closeProductPage = function () {
@@ -3418,6 +3564,47 @@
         </div>`;
             }).join('');
         }
+        // ── RELATED PRODUCTS ──
+        window.renderRelatedProducts = function (relatedIds) {
+            const container = document.getElementById('ppRelated');
+            if (!container || !relatedIds.length) {
+                if (container) container.innerHTML = '';
+                return;
+            }
+
+            const related = originalProducts.filter(p => relatedIds.includes(p.id));
+            if (!related.length) { container.innerHTML = ''; return; }
+
+            container.innerHTML = `
+    <div style="font-family:var(--font-mono);font-size:0.6rem;text-transform:uppercase;
+                letter-spacing:0.2em;color:var(--text-dim);margin-bottom:1rem;">
+      You May Also Like
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      ${related.map(p => {
+                const name = currentLang === 'en' ? (p.nameEn || p.title) : (p.nameAr || p.title);
+                const img = p.img && p.img !== 'RVN'
+                    ? `<img src="${p.img}" style="width:100%;height:100%;object-fit:cover;">`
+                    : `<div style="font-family:var(--font-display);color:var(--surface3);font-size:1.5rem;">RVN</div>`;
+                return `
+          <div onclick="openProduct('${p.id}')"
+            style="cursor:pointer;width:90px;border:1px solid var(--border);
+                   border-radius:6px;overflow:hidden;transition:border-color 0.2s;"
+            onmouseover="this.style.borderColor='var(--accent)'"
+            onmouseout="this.style.borderColor='var(--border)'">
+            <div style="width:90px;height:110px;background:var(--surface2);
+                        display:flex;align-items:center;justify-content:center;overflow:hidden;">
+              ${img}
+            </div>
+            <div style="padding:6px;font-size:0.6rem;color:var(--text-dim);
+                        white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div>
+            <div style="padding:0 6px 6px;font-family:var(--font-display);
+                        font-size:0.9rem;color:var(--accent);">EGP ${p.price}</div>
+          </div>`;
+            }).join('')}
+    </div>`;
+        }
+
 
         // ── INIT ──
         async function init() {
