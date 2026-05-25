@@ -706,6 +706,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyAZi4_sKrEO4cb7tS0x71jW_1LJ2i53ZTE",
       authDomain: "velar-store.firebaseapp.com",
@@ -717,6 +719,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const analytics = getAnalytics(app);
 
     let currentLang = 'en';
 
@@ -973,9 +976,12 @@
       if (body) body.classList.toggle('open');
     }
 
-    window.searchOrders = async function() {
-      const phone = document.getElementById('phoneInput').value.trim();
-      if (!phone) return;
+window.searchOrders = async function() {
+  let phone = document.getElementById('phoneInput').value.trim();
+  phone = phone.replace(/\s+/g, ''); // شيلنا المسافات
+  
+  if (!phone) return; // لو العميل مكتبش حاجة، متعملش بحث
+
 
       const btn = document.getElementById('searchBtn');
       const results = document.getElementById('resultsSection');
