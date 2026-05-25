@@ -1729,6 +1729,7 @@
       transition: border 0.2s, box-shadow 0.2s;
       font-size: 0.78rem;
       -webkit-appearance: none;
+      appearance: none;
     }
 
     .co-input:focus {
@@ -2832,6 +2833,8 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getFirestore, collection, getDocs, addDoc, serverTimestamp, query, where } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-analytics.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyAZi4_sKrEO4cb7tS0x71jW_1LJ2i53ZTE",
       authDomain: "velar-store.firebaseapp.com",
@@ -2843,6 +2846,7 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const analytics = getAnalytics(app);
 
     // ── STATE ──
     let productsDB = [];
@@ -2887,7 +2891,7 @@
         discount_code: "Discount code or gift card", apply: "Apply",
         subtotal: "Subtotal", shipping: "Shipping", co_sub: "Secure Checkout",
         order_summary: "Order Summary", cancel: "Cancel", login_btn: "Sign in",
-        select_options: "Select Options", nav_track: "Track Order",related_title: "You May Also Like",
+        select_options: "Select Options", nav_track: "Track Order", related_title: "You May Also Like",
       },
       ar: {
         logo: "فيلار", nav_new: "وصل حديثاً", nav_col: "التشكيلات", nav_about: "عن العلامة",
@@ -2916,7 +2920,7 @@
         discount_code: "كود الخصم", apply: "تطبيق",
         subtotal: "المجموع الفرعي", shipping: "مصاريف الشحن", co_sub: "دفع آمن",
         order_summary: "ملخص الطلب", cancel: "إلغاء", login_btn: "تسجيل الدخول",
-        select_options: "تحديد الخيارات", nav_track: "تتبع الطلب",related_title: "قد يعجبك أيضاً",
+        select_options: "تحديد الخيارات", nav_track: "تتبع الطلب", related_title: "قد يعجبك أيضاً",
       }
     };
 
