@@ -761,7 +761,7 @@
     .products-grid {
       display: grid;
       /* استخدمنا 5 أو ممكن تخليها 6 لو عايزهم أصغر كمان */
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
@@ -3048,7 +3048,7 @@
         container.innerHTML = `<div style="text-align:center;padding:4rem;color:var(--text-dim);font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.1em;grid-column:span 4;">No products found.</div>`;
         return;
       }
-      const html = productsDB.slice(0, 5).map((p, idx) => {
+      const html = productsDB.slice(0, 6).map((p, idx) => {
         const name = currentLang === 'en' ? (p.nameEn || p.title || '') : (p.nameAr || p.title || '');
         const isWished = wishlist.includes(p.id);
         let imgH = '';
