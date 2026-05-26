@@ -694,7 +694,7 @@
           if (o.status === 'Delivered') badge = 'bg-delivered';
           if (o.status === 'Cancelled') badge = 'bg-cancelled';
 
-          html += `
+        html += `
             <tr class="order-row">
               <td class="oid">...${o.id.slice(-6)}</td>
               <td class="ocust">${o.customer.firstName} ${o.customer.lastName}</td>
@@ -706,6 +706,7 @@
                 <button class="action-btn" style="color:#5296e0; border-color:#5296e0;" onclick="updateOrderStatus('${o.id}', 'Shipped')">Ship</button>
                 <button class="action-btn" style="color:#c9a96e; border-color:#c9a96e;" onclick="updateOrderStatus('${o.id}', 'Delivered')">Deliver</button>
                 <button class="action-btn danger" onclick="updateOrderStatus('${o.id}', 'Cancelled')">Cancel</button>
+                <button class="action-btn danger" style="background:var(--red); color:var(--bg);" onclick="deleteOrder('${o.id}')">Delete</button>
               </td>
             </tr>`;
         });
@@ -755,6 +756,19 @@
         City/Gov: <span>${order.customer.city}, ${order.customer.governorate}</span><br>
         Payment: <span>${order.paymentMethod || 'COD'}</span>`;
       document.getElementById('orderModal').style.display = 'flex';
+      window.deleteOrder = async (id) => {
+      if (!confirm("متأكد إنك عاوز تحذف الأوردر ده نهائياً؟ مفيش تراجع عن الخطوة دي!")) return;
+      
+      try {
+        await deleteDoc(doc(db, "orders", id));
+        alert("تم حذف الأوردر بنجاح!");
+        loadOrders(); 
+        loadStats(); // عشان نحدث الإحصائيات اللي فوق
+      } catch (error) {
+        console.error(error);
+        alert("حصل خطأ أثناء الحذف.");
+      }
+    };
     };
 
     // -- Products Logic --
