@@ -1,7 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" data-theme="light">
+<html lang="en" dir="ltr" data-theme="light" id="htmlRoot">
 
 <head>
+    <script>
+        const t = localStorage.getItem('velarTheme');
+        if (t) document.documentElement.setAttribute('data-theme', t);
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VELAR — Modern Streetwear</title>
