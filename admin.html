@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <title>VELAR - Admin Dashboard Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --surface: #111111;
+      --surface2: #1a1a1a;
+      --border: rgba(255, 255, 255, 0.07);
+      --text: #f0ece4;
+      --text-dim: rgba(240, 236, 228, 0.45);
+      --accent: #c9a96e;
+      --red: #e05252;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .sidebar {
+      width: 250px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      text-align: left;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.3s;
+      padding: 0.8rem;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: var(--bg);
+      background: var(--accent);
+      font-weight: 700;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 2rem 3rem;
+      overflow-y: auto;
+    }
+
+    .section-container {
+      display: none;
+      animation: fadeIn 0.4s;
+    }
+
+    .section-container.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .stat-title {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 0.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+      background: var(--surface);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th,
+    td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    th {
+      color: var(--text-dim);
+      text-transform: uppercase;
+      background: var(--surface2);
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      font-family: inherit;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+      max-width: 500px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+
+    button.primary {
+      padding: 0.8rem 1.5rem;
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: inherit;
+      transition: 0.2s;
+    }
+
+    button.primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    button.primary:disabled {
+      background: var(--text-dim);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .action-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      transition: 0.2s;
+      margin-right: 5px;
+    }
+
+    .action-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .action-btn.danger:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .badge {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .bg-pending {
+      background: rgba(201, 169, 110, 0.2);
+      color: var(--accent);
+    }
+
+    .bg-shipped {
+      background: rgba(37, 211, 102, 0.2);
+      color: #25d366;
+    }
+
+    .bg-cancelled {
+      background: rgba(224, 82, 82, 0.2);
+      color: var(--red);
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      width: 600px;
+      max-width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 8px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .order-item-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 0;
+      font-size: 0.8rem;
+    }
+
+    .customer-info-box {
+      background: var(--bg);
+      padding: 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+
+    .customer-info-box span {
+      color: var(--text);
+    }
+
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 3000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-box {
+      background: var(--surface);
+      padding: 3rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .access-denied-msg {
+      color: var(--red);
+      font-size: 0.75rem;
+      text-align: center;
+      display: none;
+    }
+
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+
+      #orderModal,
+      #orderModal * {
+        visibility: visible;
+      }
+
+      #orderModal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        border: none;
+        box-shadow: none;
+        background: white;
+        color: black;
+      }
+
+      .close-modal,
+      button.primary {
+        display: none !important;
+      }
+
+      .customer-info-box {
+        border: 1px solid #ccc;
+        color: black;
+        background: #fff;
+      }
+
+      .customer-info-box span {
+        color: black;
+        font-weight: bold;
+      }
+
+      .order-item-row {
+        border-bottom: 1px solid #eee;
+        color: black;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Login Overlay -->
+  <div id="loginOverlay">
+    <div class="login-box">
+      <h2 style="color: var(--accent); margin-top:0; border:none;">Admin Login</h2>
+      <input type="email" id="adminEmail" placeholder="Email">
+      <input type="password" id="adminPass" placeholder="Password">
+      <!-- FIX #3: رسالة خطأ لو مش admin -->
+      <div class="access-denied-msg" id="accessDeniedMsg">⛔ Access Denied: Not an admin account.</div>
+      <button class="primary" id="loginBtn" onclick="loginAdmin()">Login</button>
+    </div>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div class="modal-overlay" id="orderModal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content">
+      <button class="close-modal" onclick="document.getElementById('orderModal').style.display='none'">&times;</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+        <h2 id="modalOrderId" style="border:none; margin: 0;">Order Details</h2>
+        <button class="primary" onclick="window.print()"
+          style="padding: 0.4rem 1rem; font-size: 0.7rem; background: #25d366;">Print Invoice 🖨️</button>
+      </div>
+      <div id="modalOrderDate" style="font-size: 0.7rem; color: var(--text-dim); margin-bottom: 2rem;"></div>
+      <h3 style="font-size: 0.9rem; color: var(--accent);">Items</h3>
+      <div id="modalItemsList" style="margin-bottom: 2rem;"></div>
+      <h3 style="font-size: 0.9rem; color: var(--accent);">Customer & Shipping</h3>
+      <div class="customer-info-box" id="modalCustomerInfo"></div>
+    </div>
+  </div>
+
+  <!-- Edit Product Modal -->
+  <div class="modal-overlay" id="editProductModal" onclick="if(event.target===this) this.style.display='none'">
+    <div class="modal-content">
+      <button class="close-modal"
+        onclick="document.getElementById('editProductModal').style.display='none'">&times;</button>
+      <h2 style="border:none; margin-bottom: 1.5rem;">Edit Product</h2>
+      <input type="hidden" id="epId">
+      <div class="form-group"><label>Product Name (EN) *</label><input type="text" id="epNameEn"></div>
+      <div class="form-group"><label>Product Name (AR)</label><input type="text" id="epNameAr"></div>
+      <div class="form-group"><label>Category</label><input type="text" id="epCategory"></div>
+      <div class="form-group"><label>Price (EGP) *</label><input type="number" id="epPrice"></div>
+      <!-- FIX #2: epStock input مضاف -->
+      <div class="form-group"><label>Stock Quantity</label><input type="number" id="epStock" min="0" placeholder="0">
+      </div>
+      <div class="form-group"><label>Main Image URL</label><input type="text" id="epImg"></div>
+      <div class="form-group"><label>Hover Image URL</label><input type="text" id="epImgHover"></div>
+      <div class="form-group">
+  <label>Extra Images (One URL per line)</label>
+  <textarea id="epImgs" rows="4" style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;"></textarea>
+</div>
+      <div class="form-group"><label>Sizes (Comma separated)</label><input type="text" id="epSizes"
+          oninput="buildEditVariantsTable()"></div>
+      <div class="form-group"><label>Colors (Hex codes, Comma separated)</label><input type="text" id="epColors"
+          oninput="buildEditVariantsTable()"></div>
+      <div id="epVariantsContainer" style="margin-bottom: 1.5rem; width: 100%;"></div>
+      <div class="form-group">
+  <label>Related Products IDs (comma separated)</label>
+  <input type="text" id="epRelated" placeholder="id1, id2, id3">
+</div>
+      <button class="primary" id="saveEditBtn" onclick="saveEditedProduct()" style="width: 100%;">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">VELAR ADMIN</div>
+    <button class="nav-btn active" onclick="switchTab('dashboard', this)">Overview Stats</button>
+    <button class="nav-btn" onclick="switchTab('orders', this)">Orders Management</button>
+    <button class="nav-btn" onclick="switchTab('products', this)">Products & Inventory</button>
+    <button class="nav-btn" onclick="switchTab('coupons', this)">Discount Coupons</button>
+    <button class="nav-btn" onclick="logoutAdmin()" style="margin-top: auto; color: var(--red);">Secure Logout</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <div id="dashboard-section" class="section-container active">
+      <h2>Overview Dashboard</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-title">Total Revenue</div>
+          <div class="stat-value" id="statRevenue">EGP 0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Total Orders</div>
+          <div class="stat-value" id="statOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-title">Active Products</div>
+          <div class="stat-value" id="statProducts">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="orders-section" class="section-container">
+      <h2>Orders Management</h2>
+      <input type="text" class="search-bar" id="searchOrder" placeholder="Search by Order ID or Customer Name..."
+        onkeyup="filterOrders()">
+      <table>
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody"></tbody>
+      </table>
+    </div>
+
+    <div id="products-section" class="section-container">
+      <h2>Products Inventory</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="productsTableBody"></tbody>
+      </table>
+
+      <h2 style="margin-top: 3rem;">Add New Product</h2>
+      <div class="form-group"><label>Product Name (EN) *</label><input type="text" id="pNameEn"></div>
+      <div class="form-group"><label>Product Name (AR)</label><input type="text" id="pNameAr"></div>
+      <div class="form-group"><label>Category</label><input type="text" id="pCategory" placeholder="e.g. T-shirt"></div>
+      <div class="form-group"><label>Price (EGP) *</label><input type="number" id="pPrice"></div>
+      <!-- FIX #1: pStock input مضاف -->
+      <div class="form-group"><label>Stock Quantity</label><input type="number" id="pStock" min="0" placeholder="0">
+      </div>
+      <div class="form-group"><label>Main Image URL</label><input type="text" id="pImg" placeholder="https://..."></div>
+      <div class="form-group"><label>Hover Image URL (Optional)</label><input type="text" id="pImgHover"
+          placeholder="https://..."></div>
+          <div class="form-group">
+  <label>Extra Images (One URL per line)</label>
+  <textarea id="pImgs" rows="4" style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;" placeholder="https://img1.jpg&#10;https://img2.jpg&#10;https://img3.jpg"></textarea>
+</div>
+      <div class="form-group"><label>Sizes (Comma separated)</label><input type="text" id="pSizes"
+          placeholder="e.g. M, L, XL" oninput="buildAddVariantsTable()"></div>
+      <div class="form-group"><label>Colors (Hex codes, Comma separated)</label><input type="text" id="pColors"
+          placeholder="e.g. #000000, #FFFFFF" oninput="buildAddVariantsTable()"></div>
+      <div id="pVariantsContainer" style="margin-bottom: 1.5rem; width: 100%; max-width: 500px;"></div>
+      <div class="form-group">
+  <label>Related Products IDs (comma separated)</label>
+  <input type="text" id="pRelated" placeholder="id1, id2, id3">
+</div>
+      <button class="primary" id="addProductBtn" onclick="addNewProduct()">Add Product</button>
+    </div>
+
+    <div id="coupons-section" class="section-container">
+      <h2>Active Coupons</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Discount</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="couponsTableBody"></tbody>
+      </table>
+      <h2 style="margin-top: 3rem;">Create Coupon</h2>
+      <div class="form-group"><label>Coupon Code *</label><input type="text" id="cCode" placeholder="VELAR20"></div>
+      <div class="form-group"><label>Discount Percentage (%) *</label><input type="number" id="cDiscount"
+          placeholder="20"></div>
+      <button class="primary" onclick="addNewCoupon()">Create Coupon</button>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, addDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAZi4_sKrEO4cb7tS0x71jW_1LJ2i53ZTE",
+      authDomain: "velar-store.firebaseapp.com",
+      projectId: "velar-store",
+      storageBucket: "velar-store.firebasestorage.app",
+      messagingSenderId: "969962735240",
+      appId: "1:969962735240:web:2aa2b7126c19037ab3013d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    let allOrders = [];
+    let allProducts = [];
+
+    // -- Tab Logic --
+    window.switchTab = (tabName, btn) => {
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.section-container').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(`${tabName}-section`).classList.add('active');
+      if (tabName === 'dashboard') loadStats();
+      if (tabName === 'orders') loadOrders();
+      if (tabName === 'products') loadProducts();
+      if (tabName === 'coupons') loadCoupons();
+    };
+
+    // -- Auth Logic --
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // FIX #3: التحقق إن اليوزر موجود في collection الـ admins
+        try {
+          const adminDoc = await getDoc(doc(db, "admins", user.uid));
+          if (!adminDoc.exists()) {
+            // مش admin، نطلعه فوراً
+            await signOut(auth);
+            document.getElementById('accessDeniedMsg').style.display = 'block';
+            document.getElementById('loginOverlay').style.display = 'flex';
+            return;
+          }
+        } catch (err) {
+          // لو Security Rules منعت القراءة = مش admin
+          await signOut(auth);
+          document.getElementById('accessDeniedMsg').style.display = 'block';
+          document.getElementById('loginOverlay').style.display = 'flex';
+          return;
+        }
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('accessDeniedMsg').style.display = 'none';
+        loadStats();
+      } else {
+        document.getElementById('loginOverlay').style.display = 'flex';
+      }
+    });
+
+    window.loginAdmin = async () => {
+      const email = document.getElementById('adminEmail').value;
+      const pass = document.getElementById('adminPass').value;
+      const btn = document.getElementById('loginBtn');
+      document.getElementById('accessDeniedMsg').style.display = 'none';
+      btn.textContent = 'Verifying...'; btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+      } catch (error) {
+        alert("Login Failed: " + error.message);
+      } finally {
+        btn.textContent = 'Login'; btn.disabled = false;
+      }
+    };
+
+    window.logoutAdmin = () => signOut(auth);
+
+    // -- Stats Logic --
+    async function loadStats() {
+      try {
+        const ordersSnap = await getDocs(collection(db, "orders"));
+        const productsSnap = await getDocs(collection(db, "products"));
+        let totalRev = 0, validOrders = 0;
+        ordersSnap.forEach(d => {
+          const o = d.data();
+          if (o.status !== 'Cancelled') {
+            totalRev += Number(o.total || 0);
+            validOrders++;
+          }
+        });
+document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}`;
+        document.getElementById('statOrders').textContent = validOrders;
+        document.getElementById('statProducts').textContent = productsSnap.size;
+      } catch (error) { console.error("Stats Error:", error); }
+    }
+
+    // -- Orders Logic --
+    async function loadOrders() {
+      const tbody = document.getElementById('ordersTableBody');
+      tbody.innerHTML = '<tr><td colspan="5">Loading...</td></tr>';
+      try {
+        const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        allOrders = [];
+        let html = '';
+        snap.forEach(d => {
+          const o = d.data();
+          o.id = d.id;
+          allOrders.push(o);
+          let badge = 'bg-pending';
+          if (o.status === 'Shipped') badge = 'bg-shipped';
+          if (o.status === 'Cancelled') badge = 'bg-cancelled';
+          html += `
+            <tr class="order-row">
+              <td class="oid">...${o.id.slice(-6)}</td>
+              <td class="ocust">${o.customer.firstName} ${o.customer.lastName}</td>
+              <td style="color:var(--accent);">EGP ${o.total}</td>
+              <td><span class="badge ${badge}" id="badge-${o.id}">${o.status || 'Pending'}</span></td>
+              <td>
+                <button class="action-btn" onclick="openOrderModal('${o.id}')">View</button>
+                <button class="action-btn" onclick="updateOrderStatus('${o.id}', 'Shipped')">Ship</button>
+                <button class="action-btn danger" onclick="updateOrderStatus('${o.id}', 'Cancelled')">Cancel</button>
+              </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="5">No orders found.</td></tr>';
+      } catch (error) { console.error(error); }
+    }
+
+    window.filterOrders = () => {
+      const val = document.getElementById('searchOrder').value.toLowerCase();
+      document.querySelectorAll('.order-row').forEach(row => {
+        const id = row.querySelector('.oid').textContent.toLowerCase();
+        const cust = row.querySelector('.ocust').textContent.toLowerCase();
+        row.style.display = (id.includes(val) || cust.includes(val)) ? '' : 'none';
+      });
+    };
+
+    window.updateOrderStatus = async (id, status) => {
+      try {
+        await updateDoc(doc(db, "orders", id), { status });
+        loadOrders(); loadStats();
+      } catch (error) { alert("Update failed."); }
+    };
+
+    window.openOrderModal = (id) => {
+      const order = allOrders.find(o => o.id === id);
+      if (!order) return;
+      document.getElementById('modalOrderId').textContent = `Order ID: ${id}`;
+      document.getElementById('modalOrderDate').textContent = order.createdAt ? new Date(order.createdAt.seconds * 1000).toLocaleString() : 'N/A';
+      let itemsHtml = order.items.map(i => `
+        <div class="order-item-row">
+          <div>${i.qty}x ${i.name}<br><small style="color:var(--text-dim)">Size: ${i.size || 'N/A'} | Color: ${i.color || 'N/A'}</small></div>
+          <div style="color:var(--accent)">EGP ${i.price * i.qty}</div>
+        </div>`).join('');
+      itemsHtml += `
+        <div class="order-item-row" style="border:none; margin-top:10px;">
+          <div>Shipping</div><div>EGP ${order.shipping || 60}</div>
+        </div>
+        <div class="order-item-row" style="border:none; font-weight:700; font-size:1rem;">
+          <div>Total</div><div style="color:var(--accent)">EGP ${order.total}</div>
+        </div>`;
+      document.getElementById('modalItemsList').innerHTML = itemsHtml;
+      document.getElementById('modalCustomerInfo').innerHTML = `
+        Name: <span>${order.customer.firstName} ${order.customer.lastName}</span><br>
+        Phone: <span>${order.customer.phone}</span><br>
+        Email: <span>${order.customer.email}</span><br>
+        Address: <span>${order.customer.address}, ${order.customer.apartment || ''}</span><br>
+        City/Gov: <span>${order.customer.city}, ${order.customer.governorate}</span><br>
+        Payment: <span>${order.paymentMethod || 'COD'}</span>`;
+      document.getElementById('orderModal').style.display = 'flex';
+    };
+
+    // -- Products Logic --
+    window.loadProducts = async () => {
+      const tbody = document.getElementById('productsTableBody');
+      tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
+      try {
+        const snap = await getDocs(collection(db, "products"));
+        allProducts = [];
+        let html = '';
+        snap.forEach(d => {
+          const p = d.data();
+          p.id = d.id;
+          allProducts.push(p);
+          // FIX #5: توحيد nameEn || title
+          const displayName = p.nameEn || p.title || 'Unnamed';
+          const img = (p.img && p.img !== 'RVN')
+            ? `<img src="${p.img}" style="width:40px;height:50px;object-fit:cover;border-radius:4px;">`
+            : '<span style="font-size:0.7rem; color:var(--text-dim);">No Img</span>';
+          html += `<tr>
+            <td>${img}</td>
+            <td>${displayName}</td>
+            <td style="color:var(--accent)">EGP ${p.price}</td>
+            <td>
+              <button class="action-btn" onclick="openEditProductModal('${p.id}')">Edit</button>
+              <button class="action-btn danger" onclick="deleteProduct('${p.id}')">Delete</button>
+            </td>
+          </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="4">No products found.</td></tr>';
+      } catch (error) { console.error(error); }
+    };
+
+    window.deleteProduct = async (id) => {
+      if (!confirm("Delete this product?")) return;
+      await deleteDoc(doc(db, "products", id));
+      loadProducts(); loadStats();
+    };
+
+    // -- Variants Table Builder --
+    window.buildAddVariantsTable = () => {
+      const sizes = document.getElementById('pSizes').value.split(',').map(s => s.trim()).filter(s => s);
+      const colors = document.getElementById('pColors').value.split(',').map(c => c.trim()).filter(c => c);
+      generateVariantsHTML(sizes, colors, document.getElementById('pVariantsContainer'), 'add_var_');
+    };
+
+    window.buildEditVariantsTable = () => {
+      const sizes = document.getElementById('epSizes').value.split(',').map(s => s.trim()).filter(s => s);
+      const colors = document.getElementById('epColors').value.split(',').map(c => c.trim()).filter(c => c);
+      generateVariantsHTML(sizes, colors, document.getElementById('epVariantsContainer'), 'edit_var_', window.currentEditInventory);
+    };
+
+    function generateVariantsHTML(sizes, colors, container, prefix, existingData = {}) {
+      if (sizes.length === 0 && colors.length === 0) { container.innerHTML = ''; return; }
+      const sArr = sizes.length ? sizes : ['Default'];
+      const cArr = colors.length ? colors : ['Default'];
+      let html = '<table style="width:100%; font-size:0.75rem;"><thead><tr><th>Color</th><th>Size</th><th>Qty</th></tr></thead><tbody>';
+      cArr.forEach(c => {
+        sArr.forEach(s => {
+          const key = `${c}-${s}`;
+          const val = existingData[key] || 0;
+          html += `<tr>
+            <td><div style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:${c};border-radius:50%;display:inline-block;border:1px solid #ccc;"></span> ${c}</div></td>
+            <td>${s}</td>
+            <td><input type="number" id="${prefix}${key}" value="${val}" style="width:60px; padding:0.3rem;" min="0"></td>
+          </tr>`;
+        });
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+
+    window.addNewProduct = async () => {
+      const nameEn = document.getElementById('pNameEn').value.trim();
+      const nameAr = document.getElementById('pNameAr').value.trim();
+      const category = document.getElementById('pCategory').value.trim() || "T-shirt";
+      const price = document.getElementById('pPrice').value;
+      const img = document.getElementById('pImg').value.trim() || "RVN";
+      const imgHover = document.getElementById('pImgHover').value.trim() || "RVN";
+      // FIX #1: قراءة pStock بشكل صحيح
+      const stockQty = document.getElementById('pStock').value || 0;
+
+      if (!nameEn || !price) { alert("Name and Price are required!"); return; }
+
+      const btn = document.getElementById('addProductBtn');
+      btn.textContent = 'Adding Product...'; btn.disabled = true;
+
+      try {
+        const sizes = document.getElementById('pSizes').value
+          ? document.getElementById('pSizes').value.split(',').map(s => s.trim())
+          : ["M", "L", "XL"];
+        const colors = document.getElementById('pColors').value
+          ? document.getElementById('pColors').value.split(',').map(c => c.trim())
+          : ["#000000"];
+
+        let inventory = {};
+        const sArr = sizes.length ? sizes : ['Default'];
+        const cArr = colors.length ? colors : ['Default'];
+        cArr.forEach(c => {
+          sArr.forEach(s => {
+            const el = document.getElementById(`add_var_${c}-${s}`);
+            inventory[`${c}-${s}`] = el ? Number(el.value) : 0;
+          });
+        });
+const related = document.getElementById('pRelated').value
+  .split(',').map(s => s.trim()).filter(s => s);
+  const imgs = document.getElementById('pImgs').value.split('\n').map(s => s.trim()).filter(s => s);
+
+        await addDoc(collection(db, "products"), {
+          nameEn, nameAr, title: nameEn, category,
+          price: Number(price),
+          stock: Number(stockQty),
+img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
+        });
+
+        alert("Product Added Successfully!");
+        document.querySelectorAll('#products-section input[type="text"], #products-section input[type="number"]')
+          .forEach(input => input.value = '');
+        document.getElementById('pVariantsContainer').innerHTML = '';
+        loadProducts(); loadStats();
+      } catch (error) {
+        console.error(error); alert("Failed to add product.");
+      } finally {
+        btn.textContent = 'Add Product'; btn.disabled = false;
+      }
+    };
+
+    // -- Edit Product Logic --
+    window.openEditProductModal = (id) => {
+      const product = allProducts.find(p => p.id === id);
+      if (!product) return;
+      document.getElementById('epId').value = product.id;
+      document.getElementById('epNameEn').value = product.nameEn || product.title || '';
+      document.getElementById('epNameAr').value = product.nameAr || '';
+      document.getElementById('epCategory').value = product.category || '';
+      document.getElementById('epPrice').value = product.price || '';
+      // FIX #2: تعبئة epStock
+      document.getElementById('epStock').value = product.stock !== undefined ? product.stock : 0;
+      document.getElementById('epImg').value = product.img === 'RVN' ? '' : (product.img || '');
+      document.getElementById('epImgHover').value = product.imgHover === 'RVN' ? '' : (product.imgHover || '');
+      document.getElementById('epImgs').value = (product.imgs || []).join('\n');
+      document.getElementById('epRelated').value = (product.relatedProducts || []).join(', ');
+      document.getElementById('epSizes').value = product.sizes ? product.sizes.join(', ') : '';
+      document.getElementById('epColors').value = product.colors ? product.colors.join(', ') : '';
+      window.currentEditInventory = product.inventory || {};
+      buildEditVariantsTable();
+      document.getElementById('editProductModal').style.display = 'flex';
+    };
+
+    window.saveEditedProduct = async () => {
+      const id = document.getElementById('epId').value;
+      const nameEn = document.getElementById('epNameEn').value.trim();
+      const nameAr = document.getElementById('epNameAr').value.trim();
+      const category = document.getElementById('epCategory').value.trim() || "T-shirt";
+      const price = document.getElementById('epPrice').value;
+      const img = document.getElementById('epImg').value.trim() || "RVN";
+      const imgHover = document.getElementById('epImgHover').value.trim() || "RVN";
+      // FIX #2: قراءة epStock بشكل صحيح
+      const stockQty = document.getElementById('epStock').value || 0;
+
+      if (!nameEn || !price) { alert("Name and Price are required!"); return; }
+
+      const btn = document.getElementById('saveEditBtn');
+      btn.textContent = 'Saving Changes...'; btn.disabled = true;
+
+      try {
+        const sizes = document.getElementById('epSizes').value
+          ? document.getElementById('epSizes').value.split(',').map(s => s.trim())
+          : ["M", "L", "XL"];
+        const colors = document.getElementById('epColors').value
+          ? document.getElementById('epColors').value.split(',').map(c => c.trim())
+          : ["#000000"];
+
+        let inventory = {};
+        const sArr = sizes.length ? sizes : ['Default'];
+        const cArr = colors.length ? colors : ['Default'];
+        cArr.forEach(c => {
+          sArr.forEach(s => {
+            const el = document.getElementById(`edit_var_${c}-${s}`);
+            inventory[`${c}-${s}`] = el ? Number(el.value) : 0;
+          });
+        });
+const related = document.getElementById('epRelated').value
+  .split(',').map(s => s.trim()).filter(s => s);
+const imgs = document.getElementById('epImgs').value.split('\n').map(s => s.trim()).filter(s => s);
+        await updateDoc(doc(db, "products", id), {
+          nameEn, nameAr, title: nameEn, category,
+          price: Number(price),
+          stock: Number(stockQty),
+img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
+        });
+
+        alert("Product Updated Successfully!");
+        document.getElementById('editProductModal').style.display = 'none';
+        loadProducts();
+      } catch (error) {
+        console.error(error); alert("Failed to update product.");
+      } finally {
+        btn.textContent = 'Save Changes'; btn.disabled = false;
+      }
+    };
+
+    // -- Coupons Logic --
+    window.loadCoupons = async () => {
+      const tbody = document.getElementById('couponsTableBody');
+      try {
+        const snap = await getDocs(collection(db, "coupons"));
+        let html = '';
+        snap.forEach(d => {
+          const c = d.data();
+          html += `<tr>
+            <td><span class="badge bg-shipped">${c.code}</span></td>
+            <td>${c.discountPercent}%</td>
+            <td><button class="action-btn danger" onclick="deleteCoupon('${d.id}')">Delete</button></td>
+          </tr>`;
+        });
+        tbody.innerHTML = html || '<tr><td colspan="3">No coupons found.</td></tr>';
+      } catch (error) { console.error(error); }
+    };
+
+    window.addNewCoupon = async () => {
+      const code = document.getElementById('cCode').value;
+      const discount = document.getElementById('cDiscount').value;
+      if (!code || !discount) return;
+      await addDoc(collection(db, "coupons"), { code: code.toUpperCase(), discountPercent: Number(discount), isActive: true });
+      document.getElementById('cCode').value = '';
+      document.getElementById('cDiscount').value = '';
+      loadCoupons();
+    };
+
+    window.deleteCoupon = async (id) => {
+      if (!confirm("Delete this coupon?")) return;
+      await deleteDoc(doc(db, "coupons", id));
+      loadCoupons();
+    };
+  </script>
+</body>
+
+</html>
