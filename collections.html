@@ -3455,7 +3455,6 @@
 
         window.placeOrder = async function () {
             const vals = {
-                email: document.getElementById('coEmail').value.trim(),
                 firstName: document.getElementById('coFirstName').value.trim(),
                 lastName: document.getElementById('coLastName').value.trim(),
                 address: document.getElementById('coAddress').value.trim(),
@@ -3497,7 +3496,6 @@
                     ...vals,
                     apartment: document.getElementById('coApartment').value || '',
                     governorate: document.getElementById('coGov').value,
-                    postalCode: document.getElementById('coPostal').value || ''
                 },
                 paymentMethod: document.querySelector('input[name="payment"]:checked')?.value || 'COD',
                 items: cart.map(item => ({
