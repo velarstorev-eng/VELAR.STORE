@@ -249,6 +249,7 @@
       background: rgba(37, 211, 102, 0.2);
       color: #25d366;
     }
+
     .bg-confirmed {
       background: rgba(82, 224, 122, 0.1);
       color: #52e07a;
@@ -258,7 +259,7 @@
       background: rgba(82, 224, 122, 0.2);
       color: #25d366;
     }
-    
+
     /* تعديل بسيط على لون الـ Shipped عشان تفصله عن الـ Delivered */
     .bg-shipped {
       background: rgba(82, 150, 224, 0.1);
@@ -694,7 +695,7 @@
           if (o.status === 'Delivered') badge = 'bg-delivered';
           if (o.status === 'Cancelled') badge = 'bg-cancelled';
 
-        html += `
+          html += `
             <tr class="order-row">
               <td class="oid">...${o.id.slice(-6)}</td>
               <td class="ocust">${o.customer.firstName} ${o.customer.lastName}</td>
@@ -756,19 +757,19 @@
         City/Gov: <span>${order.customer.city}, ${order.customer.governorate}</span><br>
         Payment: <span>${order.paymentMethod || 'COD'}</span>`;
       document.getElementById('orderModal').style.display = 'flex';
-      window.deleteOrder = async (id) => {
-      if (!confirm("متأكد إنك عاوز تحذف الأوردر ده نهائياً؟ مفيش تراجع عن الخطوة دي!")) return;
-      
+    };
+
+    window.deleteOrder = async (id) => {
+      if (!confirm("متأكد إنك عاوز تحذف الأوردر ده نهائياً؟")) return;
       try {
         await deleteDoc(doc(db, "orders", id));
         alert("تم حذف الأوردر بنجاح!");
-        loadOrders(); 
-        loadStats(); // عشان نحدث الإحصائيات اللي فوق
+        loadOrders();
+        loadStats();
       } catch (error) {
         console.error(error);
         alert("حصل خطأ أثناء الحذف.");
       }
-    };
     };
 
     // -- Products Logic --
