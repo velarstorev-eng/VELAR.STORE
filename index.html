@@ -1244,8 +1244,9 @@
       border-radius: 50%;
       cursor: pointer;
       transition: all 0.25s;
-      border: 2px solid transparent;
-      box-shadow: 0 0 0 1px var(--border);
+      border: none;
+      outline: 1px solid var(--border);
+      overflow: hidden;
     }
 
     .color-swatch:hover {
@@ -1253,7 +1254,8 @@
     }
 
     .color-swatch.selected {
-      box-shadow: 0 0 0 2px var(--accent);
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     .add-to-cart-btn {
