@@ -249,6 +249,21 @@
       background: rgba(37, 211, 102, 0.2);
       color: #25d366;
     }
+    .bg-confirmed {
+      background: rgba(82, 224, 122, 0.1);
+      color: #52e07a;
+    }
+
+    .bg-delivered {
+      background: rgba(82, 224, 122, 0.2);
+      color: #25d366;
+    }
+    
+    /* تعديل بسيط على لون الـ Shipped عشان تفصله عن الـ Delivered */
+    .bg-shipped {
+      background: rgba(82, 150, 224, 0.1);
+      color: #5296e0;
+    }
 
     .bg-cancelled {
       background: rgba(224, 82, 82, 0.2);
@@ -433,18 +448,19 @@
       <div class="form-group"><label>Main Image URL</label><input type="text" id="epImg"></div>
       <div class="form-group"><label>Hover Image URL</label><input type="text" id="epImgHover"></div>
       <div class="form-group">
-  <label>Extra Images (One URL per line)</label>
-  <textarea id="epImgs" rows="4" style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;"></textarea>
-</div>
+        <label>Extra Images (One URL per line)</label>
+        <textarea id="epImgs" rows="4"
+          style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;"></textarea>
+      </div>
       <div class="form-group"><label>Sizes (Comma separated)</label><input type="text" id="epSizes"
           oninput="buildEditVariantsTable()"></div>
       <div class="form-group"><label>Colors (Hex codes, Comma separated)</label><input type="text" id="epColors"
           oninput="buildEditVariantsTable()"></div>
       <div id="epVariantsContainer" style="margin-bottom: 1.5rem; width: 100%;"></div>
       <div class="form-group">
-  <label>Related Products IDs (comma separated)</label>
-  <input type="text" id="epRelated" placeholder="id1, id2, id3">
-</div>
+        <label>Related Products IDs (comma separated)</label>
+        <input type="text" id="epRelated" placeholder="id1, id2, id3">
+      </div>
       <button class="primary" id="saveEditBtn" onclick="saveEditedProduct()" style="width: 100%;">Save Changes</button>
     </div>
   </div>
@@ -523,19 +539,21 @@
       <div class="form-group"><label>Main Image URL</label><input type="text" id="pImg" placeholder="https://..."></div>
       <div class="form-group"><label>Hover Image URL (Optional)</label><input type="text" id="pImgHover"
           placeholder="https://..."></div>
-          <div class="form-group">
-  <label>Extra Images (One URL per line)</label>
-  <textarea id="pImgs" rows="4" style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;" placeholder="https://img1.jpg&#10;https://img2.jpg&#10;https://img3.jpg"></textarea>
-</div>
+      <div class="form-group">
+        <label>Extra Images (One URL per line)</label>
+        <textarea id="pImgs" rows="4"
+          style="width:100%;padding:0.8rem;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:4px;font-family:inherit;box-sizing:border-box;resize:vertical;"
+          placeholder="https://img1.jpg&#10;https://img2.jpg&#10;https://img3.jpg"></textarea>
+      </div>
       <div class="form-group"><label>Sizes (Comma separated)</label><input type="text" id="pSizes"
           placeholder="e.g. M, L, XL" oninput="buildAddVariantsTable()"></div>
       <div class="form-group"><label>Colors (Hex codes, Comma separated)</label><input type="text" id="pColors"
           placeholder="e.g. #000000, #FFFFFF" oninput="buildAddVariantsTable()"></div>
       <div id="pVariantsContainer" style="margin-bottom: 1.5rem; width: 100%; max-width: 500px;"></div>
       <div class="form-group">
-  <label>Related Products IDs (comma separated)</label>
-  <input type="text" id="pRelated" placeholder="id1, id2, id3">
-</div>
+        <label>Related Products IDs (comma separated)</label>
+        <input type="text" id="pRelated" placeholder="id1, id2, id3">
+      </div>
       <button class="primary" id="addProductBtn" onclick="addNewProduct()">Add Product</button>
     </div>
 
@@ -651,7 +669,7 @@
             validOrders++;
           }
         });
-document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}`;
+        document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}`;
         document.getElementById('statOrders').textContent = validOrders;
         document.getElementById('statProducts').textContent = productsSnap.size;
       } catch (error) { console.error("Stats Error:", error); }
@@ -671,8 +689,11 @@ document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}
           o.id = d.id;
           allOrders.push(o);
           let badge = 'bg-pending';
+          if (o.status === 'Confirmed') badge = 'bg-confirmed';
           if (o.status === 'Shipped') badge = 'bg-shipped';
+          if (o.status === 'Delivered') badge = 'bg-delivered';
           if (o.status === 'Cancelled') badge = 'bg-cancelled';
+
           html += `
             <tr class="order-row">
               <td class="oid">...${o.id.slice(-6)}</td>
@@ -681,7 +702,9 @@ document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}
               <td><span class="badge ${badge}" id="badge-${o.id}">${o.status || 'Pending'}</span></td>
               <td>
                 <button class="action-btn" onclick="openOrderModal('${o.id}')">View</button>
-                <button class="action-btn" onclick="updateOrderStatus('${o.id}', 'Shipped')">Ship</button>
+                <button class="action-btn" style="color:#52e07a; border-color:#52e07a;" onclick="updateOrderStatus('${o.id}', 'Confirmed')">Confirm</button>
+                <button class="action-btn" style="color:#5296e0; border-color:#5296e0;" onclick="updateOrderStatus('${o.id}', 'Shipped')">Ship</button>
+                <button class="action-btn" style="color:#c9a96e; border-color:#c9a96e;" onclick="updateOrderStatus('${o.id}', 'Delivered')">Deliver</button>
                 <button class="action-btn danger" onclick="updateOrderStatus('${o.id}', 'Cancelled')">Cancel</button>
               </td>
             </tr>`;
@@ -793,11 +816,20 @@ document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}
         sArr.forEach(s => {
           const key = `${c}-${s}`;
           const val = existingData[key] || 0;
+
+          // 1. بنظبط اللون الأول (الجافاسكريبت)
+          let bgStyle = c;
+          if (c.includes('/')) {
+            let parts = c.split('/');
+            bgStyle = `linear-gradient(135deg, ${parts[0]} 50%, ${parts[1]} 50%)`;
+          }
+
+          // 2. بعدين بنرسم الـ HTML مرة واحدة
           html += `<tr>
-            <td><div style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:${c};border-radius:50%;display:inline-block;border:1px solid #ccc;"></span> ${c}</div></td>
-            <td>${s}</td>
-            <td><input type="number" id="${prefix}${key}" value="${val}" style="width:60px; padding:0.3rem;" min="0"></td>
-          </tr>`;
+          <td><div style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;background:${bgStyle};border-radius:50%;display:inline-block;border:1px solid var(--border);"></span> ${c}</div></td>
+          <td>${s}</td>
+          <td><input type="number" id="${prefix}${key}" value="${val}" style="width:60px; padding:0.3rem;" min="0"></td>
+        </tr>`;
         });
       });
       html += '</tbody></table>';
@@ -836,15 +868,15 @@ document.getElementById('statRevenue').textContent = `EGP ${totalRev.toFixed(2)}
             inventory[`${c}-${s}`] = el ? Number(el.value) : 0;
           });
         });
-const related = document.getElementById('pRelated').value
-  .split(',').map(s => s.trim()).filter(s => s);
-  const imgs = document.getElementById('pImgs').value.split('\n').map(s => s.trim()).filter(s => s);
+        const related = document.getElementById('pRelated').value
+          .split(',').map(s => s.trim()).filter(s => s);
+        const imgs = document.getElementById('pImgs').value.split('\n').map(s => s.trim()).filter(s => s);
 
         await addDoc(collection(db, "products"), {
           nameEn, nameAr, title: nameEn, category,
           price: Number(price),
           stock: Number(stockQty),
-img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
+          img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
         });
 
         alert("Product Added Successfully!");
@@ -914,14 +946,14 @@ img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
             inventory[`${c}-${s}`] = el ? Number(el.value) : 0;
           });
         });
-const related = document.getElementById('epRelated').value
-  .split(',').map(s => s.trim()).filter(s => s);
-const imgs = document.getElementById('epImgs').value.split('\n').map(s => s.trim()).filter(s => s);
+        const related = document.getElementById('epRelated').value
+          .split(',').map(s => s.trim()).filter(s => s);
+        const imgs = document.getElementById('epImgs').value.split('\n').map(s => s.trim()).filter(s => s);
         await updateDoc(doc(db, "products", id), {
           nameEn, nameAr, title: nameEn, category,
           price: Number(price),
           stock: Number(stockQty),
-img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
+          img, imgHover, imgs, sizes, colors, inventory, relatedProducts: related
         });
 
         alert("Product Updated Successfully!");
