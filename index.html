@@ -3471,11 +3471,6 @@
         return;
       }
 
-      const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailReg.test(vals.email)) {
-        showToast(currentLang === 'en' ? 'Invalid email address' : 'بريد إلكتروني غير صحيح');
-        return;
-      }
 
       const btn = document.getElementById('placeOrderBtn');
       btn.disabled = true;
