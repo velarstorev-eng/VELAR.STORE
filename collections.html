@@ -3237,7 +3237,7 @@
                     : c;
 
                 return `<div class="color-swatch ${selectedColor === c ? 'selected' : ''}"
-    style="background: ${bgStyle};"
+    style="background: ${bgStyle}; overflow:hidden; border-radius:50%;"
     onclick="selectColor('${c}')"
     title="${c}"></div>`;
             }).join('');
